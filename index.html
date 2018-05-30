@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<head>
+  <title> Calculator </title>
+  <link rel="stylesheet" href="css/style.css">
+
+</head>
+<body>
+  <div id="calcBody">
+    <div id="display">
+      <p id="calcText"> </p>
+    </div>
+    <div id="buttonDiv">
+          <button class="button" id="clearEntry"> CE </button>
+          <button class="button" id="clear"> C </button>
+          <button class="button" id="backspace"> Backspace </button>
+          <button class="button opButton" id="divide" value="/"> &#247 </button>
+          <button class="button numButton" id="seven" value="7"> 7 </button>
+          <button class="button numButton" id="eight" value="8"> 8 </button>
+          <button class="button numButton" id="nine" value="9"> 9 </button>
+          <button class="button opButton" id="multiply" value="*"> &#10005 </button>
+          <button class="button numButton" id="four" value="4"> 4 </button>
+          <button class="button numButton" id="five" value="5"> 5 </button>
+          <button class="button numButton" id="six" value="6"> 6 </button>
+          <button class="button opButton" id="minus" value="-"> - </button>
+          <button class="button numButton" id="one" value="1"> 1 </button> 
+          <button class="button numButton" id="two" value="2"> 2 </button>
+          <button class="button numButton" id="three" value="3"> 3 </button>
+          <button class="button opButton" id="plus" value="+"> + </button>
+          <button class="button" id="changeSign"> &#177 </button>
+          <button class="button numButton" id="zero" value="0"> 0 </button>
+          <button class="button" id="point"> . </button>
+          <button class="button" id="equals"> = </button>
+    </div>
+  </div>
+  <script>
+	function add(a, b) {
+		return a + b;
+};
+
+	function subtract(a, b) {
+		return a - b;
+};
+
+	function multiply(a, b) {
+		return a * b;
+};
+
+	function divide(a, b) {
+		return a / b;
+
+};
+	
+	
+	function operate(a, b, operator) {
+		if (operator == '+') {
+			return Number(add(a, b));
+		} else if (operator == '-') {
+		 	return Number(subtract(a, b));
+		} else if (operator == '*') {
+			return Number(multiply(a, b));
+		} else if (operator == '/') {
+			return Number(divide(a, b));
+		}
+};
+
+	function updateValue(numButton) {
+		// Clears variables if new number entered before calculation
+		if (opArray.length != currentOp+1) {
+			clear()
+		}
+		// Creates input number as string
+		inputValue += numButton.value.toString();
+		document.getElementById("calcText").innerHTML = inputValue;
+};
+
+	function updateOperator(opButton) {
+		if (inputValue != '') {
+			inputArray.push(Number(inputValue))
+		}
+		if (inputArray.length > 1 && opArray.length > 0) {
+			calculate()
+		}
+		opArray.push(opButton.value)
+		inputValue = ''
+		document.getElementById("calcText").innerHTML = opArray[opArray.length - 1];
+};
+
+
+	function calculate() {
+		if (inputValue != '') {
+			inputArray.push(Number(inputValue))
+			inputValue = ''
+			document.getElementById("calcText").innerHTML = total
+		}	
+		if (inputArray.length > 1 && opArray.length > 0) {
+			if (inputArray[1] == 0 && opArray[currentOp] == "/") {
+				clear()
+				document.getElementById("calcText").innerHTML = 'Nope'
+			} else {
+				total = operate(inputArray[0], inputArray[1], opArray[currentOp])
+				total = Math.round(total * 1000000000000) / 1000000000000
+				inputArray = [total]
+				currentOp += 1
+				inputValue = ''
+				document.getElementById("calcText").innerHTML = total
+			}
+		}
+
+};
+	// Resets when clear button is selected
+	function clear() {
+		opArray = []
+		inputArray = []
+		total = 0
+		currentOp = 0
+		document.getElementById("calcText").innerHTML = inputValue		
+};
+	// Resets the input value when CE button is selected
+	function clearEntry() {
+		inputValue = ''
+		document.getElementById("calcText").innerHTML = inputValue
+};
+	// Removes last string entry
+	function backspace() {
+		inputValue = inputValue.slice(0, -1);
+		document.getElementById("calcText").innerHTML = inputValue
+};
+	// Adds decimal is not already present in the string
+	function addDecimal() {
+		if (inputValue.match(/[.]/g) == null) {
+			inputValue += '.';
+		}
+		document.getElementById("calcText").innerHTML = inputValue;
+};
+	// Adds or removes minus symbol from beginning of string
+	function plusMinus() {
+		if (inputValue != '') {
+			if (inputValue[0] != '-') {
+				inputValue = '-' + inputValue;
+				document.getElementById("calcText").innerHTML = inputValue;
+			} else if (inputValue[0] == '-') {
+                  		inputValue = inputValue.slice(1);
+				document.getElementById("calcText").innerHTML = inputValue;
+			}
+		}
+};
+
+	let opArray = []
+	let inputValue = ''	
+	let inputArray = []
+	let total = 0
+	let currentOp = 0
+
+	numButtons = document.getElementsByClassName('numButton')
+	opButtons = document.getElementsByClassName('opButton')    
+	equalsButton = document.getElementById('equals')
+	clearButton = document.getElementById('clear')
+	clearEntryButton = document.getElementById('clearEntry')
+	backspaceButton = document.getElementById('backspace')
+	addDecimalButton = document.getElementById('point')
+	changeSignButton = document.getElementById('changeSign')
+
+	equalsButton.addEventListener("click", calculate, false);
+	clearButton.addEventListener("click", clear, false);
+	clearEntryButton.addEventListener("click", clearEntry, false);
+	backspaceButton.addEventListener("click", backspace, false);	
+	addDecimalButton.addEventListener("click", addDecimal, false);
+	changeSignButton.addEventListener("click", plusMinus, false);
+
+	for (i = 0; i < numButtons.length; i++) {
+		numButtons[i].addEventListener("click", function() {updateValue(this)}, false);
+	};
+
+	for (i = 0; i < opButtons.length; i++) {
+		opButtons[i].addEventListener("click", function() {updateOperator(this)}, false);
+	};
+	
+  </script>
+</body>
