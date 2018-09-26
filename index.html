@@ -66,7 +66,7 @@
 	function updateValue(numButton) {
 		// Clears variables if new number entered before calculation
 		if (opArray.length != currentOp+1) {
-			clear()
+			clear();
 		}
 		// Creates input number as string
 		inputValue += numButton.value.toString();
@@ -75,13 +75,13 @@
 
 	function updateOperator(opButton) {
 		if (inputValue != '') {
-			inputArray.push(Number(inputValue))
+			inputArray.push(Number(inputValue));
 		}
 		if (inputArray.length > 1 && opArray.length > 0) {
-			calculate()
+			calculate();
 		}
-		opArray.push(opButton.value)
-		inputValue = ''
+		opArray.push(opButton.value);
+		inputValue = '';
 		document.getElementById("calcText").innerHTML = opArray[opArray.length - 1];
 };
 
@@ -94,8 +94,8 @@
 		}	
 		if (inputArray.length > 1 && opArray.length > 0) {
 			if (inputArray[1] == 0 && opArray[currentOp] == "/") {
-				clear()
-				document.getElementById("calcText").innerHTML = 'Nope'
+				clear();
+				document.getElementById("calcText").innerHTML = 'Nope';
 			} else {
 				total = operate(inputArray[0], inputArray[1], opArray[currentOp])
 				total = Math.round(total * 1000000000000) / 1000000000000;
@@ -125,7 +125,7 @@
 		inputValue = inputValue.slice(0, -1);
 		document.getElementById("calcText").innerHTML = inputValue;
 };
-	// Adds decimal is not already present in the string
+	// Adds decimal if not already present in the string
 	function addDecimal() {
 		if (inputValue.match(/[.]/g) == null) {
 			inputValue += '.';
